@@ -2,7 +2,6 @@
 
 //load image
 require('console-png').attachTo(console);
-let image = require('fs').readFileSync(__dirname + '/media/logo-cli.png');
 
 // chalk requirements
 const chalk = require('chalk');
@@ -59,7 +58,6 @@ puppeteer.launch({ headless: false, args: ['--no-sandbox'] }).then(async browser
 
 //runs on start of reactopt
 (function startReactopt() {
-  console.png(image);
   setTimeout(reactoptRun, 1000);
   function reactoptRun() {
     log('');
