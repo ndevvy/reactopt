@@ -31,30 +31,33 @@ let data; // comment out for testing
 let uri = process.argv[2]; // gets url from CLI "npm start [url]"
 
 //start puppeteer to allow user to interact with React app
-puppeteer.launch({ headless: false, args: ['--no-sandbox'] }).then(async browser => {
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1000, height: 1000 }); // chromium default is 800 x 600 px
-  await page.goto(uri);
+puppeteer
+  .launch({ headless: false, args: ['--no-sandbox'] })
+  .then(async browser => {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1000, height: 1000 }); // chromium default is 800 x 600 px
+    await page.goto(uri);
 
-  //close browser on 'done' but also grab data before closing browser
-  await rl.on('line', line => {
-    if (line === 'done') {
-      page
-        .evaluate(() => {
-          return window.data;
-        })
-        .then(returnedData => {
-          data = returnedData;
-          browser.close();
-          return data;
-        })
-        .then(logAudits)
-        .catch(err =>
-          console.log('Error, no data collected. Try interacting more with your page.')
-        );
-    }
-  });
-});
+    //close browser on 'done' but also grab data before closing browser
+    await rl.on('line', line => {
+      if (line === 'done') {
+        page
+          .evaluate(() => {
+            return window.data;
+          })
+          .then(returnedData => {
+            data = returnedData;
+            browser.close();
+            return data;
+          })
+          .then(logAudits)
+          .catch(err =>
+            console.log('Error, no data collected. Try interacting more with your page.')
+          );
+      }
+    });
+  })
+  .catch(err => console.log(`Error launching Puppeteer: ${err}`));
 
 //runs on start of reactopt
 (function startReactopt() {
