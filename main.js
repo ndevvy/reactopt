@@ -32,7 +32,7 @@ let uri = process.argv[2]; // gets url from CLI "npm start [url]"
 
 //start puppeteer to allow user to interact with React app
 puppeteer
-  .launch({ headless: false, args: ['--no-sandbox'] })
+  .launch({ headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox'] })
   .then(async browser => {
     const page = await browser.newPage();
     await page.setViewport({ width: 1000, height: 1000 }); // chromium default is 800 x 600 px
